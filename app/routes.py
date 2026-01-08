@@ -96,36 +96,36 @@ def get_all_capabilities(db: Session = Depends(get_db)):
                         )
                     )
 
-                process_level = None
-                process_category = None
-                if sub_process.process_level_id:
-                    pl = db.query(ProcessLevel).filter(
-                        ProcessLevel.id == sub_process.process_level_id
-                    ).first()
-                    process_level = pl.level if pl else None
-
-                if sub_process.process_category_id:
-                    pc = db.query(ProcessCategory).filter(
-                        ProcessCategory.id == sub_process.process_category_id
-                    ).first()
-                    process_category = pc.name if pc else None
-
                 sub_processes_data.append(
                     SubProcessResponse(
                         id=sub_process.id,
                         name=sub_process.name,
                         description=sub_process.description,
-                        process_level=process_level,
-                        process_category=process_category,
                         data_entities=data_entities_data
                     )
                 )
+
+            process_level = None
+            process_category = None
+            if process.process_level_id:
+                pl = db.query(ProcessLevel).filter(
+                    ProcessLevel.id == process.process_level_id
+                ).first()
+                process_level = pl.name if pl else None
+
+            if process.process_category_id:
+                pc = db.query(ProcessCategory).filter(
+                    ProcessCategory.id == process.process_category_id
+                ).first()
+                process_category = pc.name if pc else None
 
             processes_data.append(
                 ProcessResponse(
                     id=process.id,
                     name=process.name,
                     description=process.description,
+                    process_level=process_level,
+                    process_category=process_category,
                     sub_processes=sub_processes_data
                 )
             )
@@ -234,36 +234,36 @@ def get_capability_by_name(capability_name: str, db: Session = Depends(get_db)):
                     )
                 )
 
-            process_level = None
-            process_category = None
-            if sub_process.process_level_id:
-                pl = db.query(ProcessLevel).filter(
-                    ProcessLevel.id == sub_process.process_level_id
-                ).first()
-                process_level = pl.level if pl else None
-
-            if sub_process.process_category_id:
-                pc = db.query(ProcessCategory).filter(
-                    ProcessCategory.id == sub_process.process_category_id
-                ).first()
-                process_category = pc.name if pc else None
-
             sub_processes_data.append(
                 SubProcessResponse(
                     id=sub_process.id,
                     name=sub_process.name,
                     description=sub_process.description,
-                    process_level=process_level,
-                    process_category=process_category,
                     data_entities=data_entities_data
                 )
             )
+
+        process_level = None
+        process_category = None
+        if process.process_level_id:
+            pl = db.query(ProcessLevel).filter(
+                ProcessLevel.id == process.process_level_id
+            ).first()
+            process_level = pl.name if pl else None
+
+        if process.process_category_id:
+            pc = db.query(ProcessCategory).filter(
+                ProcessCategory.id == process.process_category_id
+            ).first()
+            process_category = pc.name if pc else None
 
         processes_data.append(
             ProcessResponse(
                 id=process.id,
                 name=process.name,
                 description=process.description,
+                process_level=process_level,
+                process_category=process_category,
                 sub_processes=sub_processes_data
             )
         )
@@ -374,36 +374,36 @@ def search_capabilities(keyword: str, db: Session = Depends(get_db)):
                         )
                     )
 
-                process_level = None
-                process_category = None
-                if sub_process.process_level_id:
-                    pl = db.query(ProcessLevel).filter(
-                        ProcessLevel.id == sub_process.process_level_id
-                    ).first()
-                    process_level = pl.level if pl else None
-
-                if sub_process.process_category_id:
-                    pc = db.query(ProcessCategory).filter(
-                        ProcessCategory.id == sub_process.process_category_id
-                    ).first()
-                    process_category = pc.name if pc else None
-
                 sub_processes_data.append(
                     SubProcessResponse(
                         id=sub_process.id,
                         name=sub_process.name,
                         description=sub_process.description,
-                        process_level=process_level,
-                        process_category=process_category,
                         data_entities=data_entities_data
                     )
                 )
+
+            process_level = None
+            process_category = None
+            if process.process_level_id:
+                pl = db.query(ProcessLevel).filter(
+                    ProcessLevel.id == process.process_level_id
+                ).first()
+                process_level = pl.name if pl else None
+
+            if process.process_category_id:
+                pc = db.query(ProcessCategory).filter(
+                    ProcessCategory.id == process.process_category_id
+                ).first()
+                process_category = pc.name if pc else None
 
             processes_data.append(
                 ProcessResponse(
                     id=process.id,
                     name=process.name,
                     description=process.description,
+                    process_level=process_level,
+                    process_category=process_category,
                     sub_processes=sub_processes_data
                 )
             )

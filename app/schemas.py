@@ -37,8 +37,6 @@ class SubProcessResponse(BaseModel):
     id: int
     name: Optional[str] = None
     description: Optional[str] = None
-    process_level: Optional[str] = None
-    process_category: Optional[str] = None
     data_entities: List[DataEntityResponse] = []
 
     class Config:
@@ -50,6 +48,8 @@ class ProcessResponse(BaseModel):
     id: int
     name: Optional[str] = None
     description: Optional[str] = None
+    process_level: Optional[str] = None
+    process_category: Optional[str] = None
     sub_processes: List[SubProcessResponse] = []
 
     class Config:

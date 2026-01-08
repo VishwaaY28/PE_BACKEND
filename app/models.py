@@ -74,9 +74,13 @@ class Process(Base):
     name = Column(String(255), nullable=False, index=True)
     description = Column(Text, nullable=True)
     capability_id = Column(Integer, ForeignKey("capabilities.id"), nullable=False)
+    process_level_id = Column(Integer, ForeignKey("process_levels.id"), nullable=True)
+    process_category_id = Column(Integer, ForeignKey("process_categories.id"), nullable=True)
 
     # Relationships
     capability = relationship("Capability", back_populates="processes")
+    process_level = relationship("ProcessLevel", back_populates="processes")
+    process_category = relationship("ProcessCategory", back_populates="processes")
     sub_processes = relationship("SubProcess", back_populates="process")
 
     def __repr__(self):
@@ -84,28 +88,28 @@ class Process(Base):
 
 
 class ProcessLevel(Base):
-    """Process Level entity."""
+    """Process level entity."""
     __tablename__ = "process_levels"
 
     id = Column(Integer, primary_key=True, index=True)
-    level = Column(String(50), unique=True, nullable=True, index=True)
+    name = Column(String(255), nullable=False, index=True)
 
     # Relationships
-    sub_processes = relationship("SubProcess", back_populates="process_level")
+    processes = relationship("Process", back_populates="process_level")
 
     def __repr__(self):
-        return f"<ProcessLevel(id={self.id}, level={self.level})>"
+        return f"<ProcessLevel(id={self.id}, name={self.name})>"
 
 
 class ProcessCategory(Base):
-    """Process Category entity."""
+    """Process category entity."""
     __tablename__ = "process_categories"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(255), unique=True, nullable=True, index=True)
+    name = Column(String(255), nullable=False, index=True)
 
     # Relationships
-    sub_processes = relationship("SubProcess", back_populates="process_category")
+    processes = relationship("Process", back_populates="process_category")
 
     def __repr__(self):
         return f"<ProcessCategory(id={self.id}, name={self.name})>"
@@ -119,13 +123,9 @@ class SubProcess(Base):
     name = Column(String(255), nullable=True, index=True)
     description = Column(Text, nullable=True)
     process_id = Column(Integer, ForeignKey("processes.id"), nullable=True)
-    process_level_id = Column(Integer, ForeignKey("process_levels.id"), nullable=True)
-    process_category_id = Column(Integer, ForeignKey("process_categories.id"), nullable=True)
 
     # Relationships
     process = relationship("Process", back_populates="sub_processes")
-    process_level = relationship("ProcessLevel", back_populates="sub_processes")
-    process_category = relationship("ProcessCategory", back_populates="sub_processes")
     data_entities = relationship("DataEntity", back_populates="sub_process")
 
     def __repr__(self):

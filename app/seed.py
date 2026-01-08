@@ -135,39 +135,51 @@ def seed_database():
                     Process.capability_id == capability.id
                 ).first()
                 if not process:
+                    # Process Level
+                    process_level_name = safe_get(row, "Process Level", "")
+                    process_level_id = None
+                    if process_level_name and process_level_name not in process_levels_cache:
+                        process_level = db.query(ProcessLevel).filter(
+                            ProcessLevel.name == process_level_name
+                        ).first()
+                        if not process_level:
+                            process_level = ProcessLevel(name=process_level_name)
+                            db.add(process_level)
+                            db.flush()
+                        process_levels_cache[process_level_name] = process_level
+                    
+                    process_level_cache_entry = process_levels_cache.get(process_level_name)
+                    if process_level_cache_entry:
+                        process_level_id = process_level_cache_entry.id
+
+                    # Process Category
+                    process_category_name = safe_get(row, "Process Category", "")
+                    process_category_id = None
+                    if process_category_name and process_category_name not in process_categories_cache:
+                        process_category = db.query(ProcessCategory).filter(
+                            ProcessCategory.name == process_category_name
+                        ).first()
+                        if not process_category:
+                            process_category = ProcessCategory(name=process_category_name)
+                            db.add(process_category)
+                            db.flush()
+                        process_categories_cache[process_category_name] = process_category
+                    
+                    process_category_cache_entry = process_categories_cache.get(process_category_name)
+                    if process_category_cache_entry:
+                        process_category_id = process_category_cache_entry.id
+
                     process = Process(
                         name=process_name,
                         description=safe_get(row, "Process Description", ""),
                         capability_id=capability.id,
+                        process_level_id=process_level_id,
+                        process_category_id=process_category_id,
                     )
                     db.add(process)
                     db.flush()
                 processes_cache[process_key] = process
             process = processes_cache[process_key]
-
-            # Process Level
-            process_level_name = safe_get(row, "Process Level", "")
-            if process_level_name and process_level_name not in process_levels_cache:
-                process_level = db.query(ProcessLevel).filter(
-                    ProcessLevel.level == process_level_name
-                ).first()
-                if not process_level:
-                    process_level = ProcessLevel(level=process_level_name)
-                    db.add(process_level)
-                    db.flush()
-                process_levels_cache[process_level_name] = process_level
-
-            # Process Category
-            process_category_name = safe_get(row, "Process Category", "")
-            if process_category_name and process_category_name not in process_categories_cache:
-                process_category = db.query(ProcessCategory).filter(
-                    ProcessCategory.name == process_category_name
-                ).first()
-                if not process_category:
-                    process_category = ProcessCategory(name=process_category_name)
-                    db.add(process_category)
-                    db.flush()
-                process_categories_cache[process_category_name] = process_category
 
             # Sub-Process
             sub_process_name = safe_get(row, "Sub-Process", "")
@@ -181,19 +193,10 @@ def seed_database():
                     SubProcess.process_id == process.id
                 ).first()
                 if not sub_process:
-                    process_level_id = process_levels_cache.get(
-                        safe_get(row, "Process Level", "")
-                    )
-                    process_category_id = process_categories_cache.get(
-                        safe_get(row, "Process Category", "")
-                    )
-                    
                     sub_process = SubProcess(
                         name=sub_process_name,
                         description=safe_get(row, "Sub-Process Description", ""),
                         process_id=process.id,
-                        process_level_id=process_level_id.id if process_level_id else None,
-                        process_category_id=process_category_id.id if process_category_id else None,
                     )
                     db.add(sub_process)
                     db.flush()
