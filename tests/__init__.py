@@ -1,1 +1,1 @@
-# Tests package for EBRD Compass API
+# Tests package for PE Compass API

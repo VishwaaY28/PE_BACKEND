@@ -3,7 +3,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 import os
 
 # Database URL - Using SQLite for simplicity, can be changed to PostgreSQL or MySQL
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./ebrd_compass.db")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./PE_compass.db")
 
 # Create engine
 engine = create_engine(

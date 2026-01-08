@@ -1,0 +1,48 @@
+Goal,Vertical,Sub-Vertical,Capability,Capability Description ,Process,Process Description,Process Level,Process Category,Sub-Process,Sub-Process Description,Data Entity,Application,API
+Identify PE target companies,Capital market,Private equity,PE Target company identification ,Identifying and sourcing investment opportunities for Private Equity Firms,Market Research,"Gathering and analyzing market data to identify promising sectors, emerging trends, and potential investment targets.",Process level 1,Front office,Fund mandate,"outlines fund specific details like type,size,sector,geography,IRR,deal size","1. Fund type
+2.Fund Size
+3. Geographical Focus
+4. Sector Focus
+5. Excluded Sectors
+6. Investment Stage
+7. Deal Size Range
+8. Equity Stage Prefrence
+9. FUnd return target (IRR)
+10.Financial Criteria
+11. Value creation Approach
+12. Exit Preference
+13. Exit Horizon
+",Static framework,NA
+Identify PE target companies,Capital market,Private equity,PE Target company identification ,Identifying and sourcing investment opportunities for Private Equity Firms,Market Research,"Gathering and analyzing market data to identify promising sectors, emerging trends, and potential investment targets.",Process level 2,Front office,Country screening framework,identify target country as per instructions given in fund mandate & given restrcitions.,"1.Macroeconomic fundamentals (GDP growth,Inflation %)
+2.Political & regulatory environment (Stability index)
+3.Currency & capital flow considerations (exchange rate)
+4.Legal system & contract enforcement (rule of law index)
+5.Market size & structure (urbanization %)
+6.ESG & social considerations (social inclusion score) .","World Bank, IMF, trading Economics","1. Macroeconomic.API
+2. Political & Reg. API
+3. Capital flow.API
+4. Legal System.API
+5. Amrket size.API
+6. ESG.API"
+Identify PE target companies,Capital market,Private equity,PE Target company identification ,Identifying and sourcing investment opportunities for Private Equity Firms,Investment screening & initial evaluation,"Gathering and analyzing market data to identify promising sectors, emerging trends, and potential investment targets.",Process level 3,Front office,Investment  screening and shorlisting,"identify target company in alignment with all the data points specified in fund mandate, country screening framework & company's screening framework","1.Quality of Earnings and Financial Health (current ratio, audit opinions)
+2.Company Financial Performance (net income,gross margin)
+3.Industry Attractiveness (market growth rate,entry barriers)
+4.Competitive Positioning (market share %,customer loyalty index)
+5.Management Team & Governance (corporate governance rating,executive turnover rate %)
+6.Operational Efficiency (asset turnover ratio,inventory turnover ratio)
+7.Customer & Market Dynamics (sales cycle length days,customer retention rate %)
+8.Product/Service Strength (service coverage area,product quality rating)
+9.Exit Feasibility (time to exit years,ipo readiness score)
+10.Scalability Potential (infrastructure flexibility,technology adaptability","Pitchbook,Crunchbase","1,Earning&Financials.API
+2.Financialperformance.API
+3.Industryanalysis.API
+4.Competitoranalysis.API
+5.Management&governance.API
+6.Opsreadiness.API
+7.CustMktdynamics.API
+8.Productservice.API
+9.Exitoptions.API
+10.Sclpotential.API"
+Identify PE target companies,Capital market,Private equity,PE Target company identification ,Identifying and sourcing investment opportunities for Private Equity Firms,Due Deligence,"Commercial, financial, tax, legal, operational, and ESG due diligence for the identified target company",,,,,,,
+Identify PE target companies,Capital market,Private equity,PE Target company identification ,Identifying and sourcing investment opportunities for Private Equity Firms,Financial Analysis & Deal Structuring,"Design transaction structures, negotiate economic and governance terms, and assess tax implications",,,,,,,
+Identify PE target companies,Capital market,Private equity,PE Target company identification ,Identifying and sourcing investment opportunities for Private Equity Firms,Transaction Execution & Closing,Oversee negotiation of definitive agreements and coordinate closing processes,,,,,,,

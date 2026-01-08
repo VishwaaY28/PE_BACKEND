@@ -8,12 +8,35 @@ from app.models import (
 import os
 
 
+def is_null_or_empty(value):
+    """
+    Check if a value is None, NaN, or empty string.
+    """
+    if value is None:
+        return True
+    if isinstance(value, float) and pd.isna(value):
+        return True
+    if isinstance(value, str) and value.strip() == "":
+        return True
+    return False
+
+
+def safe_get(row, key, default=""):
+    """
+    Safely get a value from a row, handling nulls and NaNs.
+    """
+    value = row.get(key, default)
+    if is_null_or_empty(value):
+        return default
+    return str(value).strip()
+
+
 def seed_database():
     """
     Seed the database from CSV file.
     """
     # Read CSV file
-    csv_path = os.path.join(os.path.dirname(__file__), "..", "EBRD_Compass.csv")
+    csv_path = os.path.join(os.path.dirname(__file__), "..", "PEcapability.csv")
     
     if not os.path.exists(csv_path):
         print(f"CSV file not found at {csv_path}")
@@ -37,7 +60,10 @@ def seed_database():
 
         for idx, row in df.iterrows():
             # Goal
-            goal_name = row["Goal"]
+            goal_name = safe_get(row, "Goal")
+            if not goal_name:
+                continue  # Skip rows with no goal
+            
             if goal_name not in goals_cache:
                 goal = db.query(Goal).filter(Goal.name == goal_name).first()
                 if not goal:
@@ -48,7 +74,10 @@ def seed_database():
             goal = goals_cache[goal_name]
 
             # Vertical
-            vertical_name = row["Vertical"]
+            vertical_name = safe_get(row, "Vertical")
+            if not vertical_name:
+                continue  # Skip rows with no vertical
+            
             if vertical_name not in verticals_cache:
                 vertical = db.query(Vertical).filter(Vertical.name == vertical_name).first()
                 if not vertical:
@@ -59,7 +88,10 @@ def seed_database():
             vertical = verticals_cache[vertical_name]
 
             # Sub-Vertical
-            sub_vertical_name = row["Sub-Vertical"]
+            sub_vertical_name = safe_get(row, "Sub-Vertical")
+            if not sub_vertical_name:
+                continue  # Skip rows with no sub-vertical
+            
             if sub_vertical_name not in sub_verticals_cache:
                 sub_vertical = db.query(SubVertical).filter(
                     SubVertical.name == sub_vertical_name
@@ -72,7 +104,10 @@ def seed_database():
             sub_vertical = sub_verticals_cache[sub_vertical_name]
 
             # Capability
-            capability_name = row["Capability"]
+            capability_name = safe_get(row, "Capability")
+            if not capability_name:
+                continue  # Skip rows with no capability
+            
             if capability_name not in capabilities_cache:
                 capability = db.query(Capability).filter(
                     Capability.name == capability_name
@@ -80,7 +115,7 @@ def seed_database():
                 if not capability:
                     capability = Capability(
                         name=capability_name,
-                        description=row.get("Capability Description", ""),
+                        description=safe_get(row, "Capability Description", ""),
                         sub_vertical_id=sub_vertical.id,
                     )
                     db.add(capability)
@@ -89,7 +124,10 @@ def seed_database():
             capability = capabilities_cache[capability_name]
 
             # Process
-            process_name = row["Process"]
+            process_name = safe_get(row, "Process")
+            if not process_name:
+                continue  # Skip rows with no process
+            
             process_key = f"{process_name}_{capability.id}"
             if process_key not in processes_cache:
                 process = db.query(Process).filter(
@@ -99,7 +137,7 @@ def seed_database():
                 if not process:
                     process = Process(
                         name=process_name,
-                        description=row.get("Process Description", ""),
+                        description=safe_get(row, "Process Description", ""),
                         capability_id=capability.id,
                     )
                     db.add(process)
@@ -108,7 +146,7 @@ def seed_database():
             process = processes_cache[process_key]
 
             # Process Level
-            process_level_name = row.get("Process Level", "")
+            process_level_name = safe_get(row, "Process Level", "")
             if process_level_name and process_level_name not in process_levels_cache:
                 process_level = db.query(ProcessLevel).filter(
                     ProcessLevel.level == process_level_name
@@ -120,7 +158,7 @@ def seed_database():
                 process_levels_cache[process_level_name] = process_level
 
             # Process Category
-            process_category_name = row.get("Process Category", "")
+            process_category_name = safe_get(row, "Process Category", "")
             if process_category_name and process_category_name not in process_categories_cache:
                 process_category = db.query(ProcessCategory).filter(
                     ProcessCategory.name == process_category_name
@@ -132,24 +170,27 @@ def seed_database():
                 process_categories_cache[process_category_name] = process_category
 
             # Sub-Process
-            sub_process_name = row.get("Sub-Process", "")
+            sub_process_name = safe_get(row, "Sub-Process", "")
+            if not sub_process_name:
+                continue  # Skip if no sub-process
+            
             sub_process_key = f"{sub_process_name}_{process.id}"
-            if sub_process_name and sub_process_key not in sub_processes_cache:
+            if sub_process_key not in sub_processes_cache:
                 sub_process = db.query(SubProcess).filter(
                     SubProcess.name == sub_process_name,
                     SubProcess.process_id == process.id
                 ).first()
                 if not sub_process:
                     process_level_id = process_levels_cache.get(
-                        row.get("Process Level", "")
+                        safe_get(row, "Process Level", "")
                     )
                     process_category_id = process_categories_cache.get(
-                        row.get("Process Category", "")
+                        safe_get(row, "Process Category", "")
                     )
                     
                     sub_process = SubProcess(
                         name=sub_process_name,
-                        description=row.get("Sub-Process Description", ""),
+                        description=safe_get(row, "Sub-Process Description", ""),
                         process_id=process.id,
                         process_level_id=process_level_id.id if process_level_id else None,
                         process_category_id=process_category_id.id if process_category_id else None,
@@ -161,7 +202,7 @@ def seed_database():
             sub_process = sub_processes_cache.get(sub_process_key)
 
             # Data Entity
-            data_entity_name = row.get("Data Entity", "")
+            data_entity_name = safe_get(row, "Data Entity", "")
             if data_entity_name and sub_process:
                 data_entity_key = f"{data_entity_name}_{sub_process.id}"
                 if data_entity_key not in data_entities_cache:
@@ -180,9 +221,9 @@ def seed_database():
                 data_entity = data_entities_cache[data_entity_key]
 
                 # Applications (can be multiple, separated by semicolon)
-                applications_str = row.get("Application", "")
+                applications_str = safe_get(row, "Application", "")
                 if applications_str:
-                    app_names = [app.strip() for app in str(applications_str).split(";")]
+                    app_names = [app.strip() for app in str(applications_str).split(";") if app.strip()]
                     for app_name in app_names:
                         if app_name:
                             app_key = f"{app_name}_{data_entity.id}"
@@ -202,9 +243,9 @@ def seed_database():
                             application = applications_cache[app_key]
 
                             # APIs (can be multiple, separated by semicolon)
-                            apis_str = row.get("API (Assumption)", "")
+                            apis_str = safe_get(row, "API (Assumption)", "")
                             if apis_str:
-                                api_names = [api.strip() for api in str(apis_str).split(";")]
+                                api_names = [api.strip() for api in str(apis_str).split(";") if api.strip()]
                                 for api_name in api_names:
                                     if api_name:
                                         api = db.query(API).filter(

@@ -1,5 +1,5 @@
 """
-Configuration settings for the EBRD Compass API
+Configuration settings for the PE Compass API
 """
 import os
 from typing import Optional
@@ -8,14 +8,14 @@ class Settings:
     """Application settings."""
     
     # API Configuration
-    API_TITLE: str = "EBRD Compass API"
+    API_TITLE: str = "PE Compass API"
     API_VERSION: str = "1.0.0"
-    API_DESCRIPTION: str = "Backend API for EBRD Compass - Project Origination & Due Diligence"
+    API_DESCRIPTION: str = "Backend API for PE Compass"
     
     # Database Configuration
     DATABASE_URL: str = os.getenv(
         "DATABASE_URL",
-        "sqlite:///./ebrd_compass.db"
+        "sqlite:///./PE_compass.db"
     )
     
     # Server Configuration

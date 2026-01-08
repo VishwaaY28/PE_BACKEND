@@ -22,7 +22,7 @@ async def lifespan(app: FastAPI):
     Lifespan context manager for application startup and shutdown.
     """
     # Startup logic
-    logger.info("Starting up EBRD Compass API...")
+    logger.info("Starting up PE Compass API...")
     
     # Create all tables
     Base.metadata.create_all(bind=engine)
@@ -39,13 +39,13 @@ async def lifespan(app: FastAPI):
     yield
     
     # Shutdown logic
-    logger.info("Shutting down EBRD Compass API...")
+    logger.info("Shutting down PE Compass API...")
 
 
 # Create FastAPI app
 app = FastAPI(
-    title="EBRD Compass API",
-    description="Backend API for EBRD Compass - Project Origination & Due Diligence",
+    title="PE Compass API",
+    description="Backend API for PE Compass",
     version="1.0.0",
     lifespan=lifespan
 )
@@ -67,7 +67,7 @@ app.include_router(router)
 def root():
     """Root endpoint."""
     return {
-        "message": "EBRD Compass API",
+        "message": "PE Compass API",
         "version": "1.0.0",
         "endpoints": {
             "health": "/api/health",

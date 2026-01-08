@@ -1,5 +1,5 @@
 """
-Test suite for EBRD Compass API
+Test suite for PE Compass API
 """
 import pytest
 from fastapi.testclient import TestClient

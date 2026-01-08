@@ -1,1 +1,1 @@
-# EBRD Compass API package
+# PE Compass API package

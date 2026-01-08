@@ -88,7 +88,7 @@ class ProcessLevel(Base):
     __tablename__ = "process_levels"
 
     id = Column(Integer, primary_key=True, index=True)
-    level = Column(String(50), unique=True, nullable=False, index=True)
+    level = Column(String(50), unique=True, nullable=True, index=True)
 
     # Relationships
     sub_processes = relationship("SubProcess", back_populates="process_level")
@@ -102,7 +102,7 @@ class ProcessCategory(Base):
     __tablename__ = "process_categories"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(255), unique=True, nullable=False, index=True)
+    name = Column(String(255), unique=True, nullable=True, index=True)
 
     # Relationships
     sub_processes = relationship("SubProcess", back_populates="process_category")
@@ -116,11 +116,11 @@ class SubProcess(Base):
     __tablename__ = "sub_processes"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(255), nullable=False, index=True)
+    name = Column(String(255), nullable=True, index=True)
     description = Column(Text, nullable=True)
-    process_id = Column(Integer, ForeignKey("processes.id"), nullable=False)
-    process_level_id = Column(Integer, ForeignKey("process_levels.id"), nullable=False)
-    process_category_id = Column(Integer, ForeignKey("process_categories.id"), nullable=False)
+    process_id = Column(Integer, ForeignKey("processes.id"), nullable=True)
+    process_level_id = Column(Integer, ForeignKey("process_levels.id"), nullable=True)
+    process_category_id = Column(Integer, ForeignKey("process_categories.id"), nullable=True)
 
     # Relationships
     process = relationship("Process", back_populates="sub_processes")
@@ -137,8 +137,8 @@ class DataEntity(Base):
     __tablename__ = "data_entities"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(255), nullable=False, index=True)
-    sub_process_id = Column(Integer, ForeignKey("sub_processes.id"), nullable=False)
+    name = Column(String(255), nullable=True, index=True)
+    sub_process_id = Column(Integer, ForeignKey("sub_processes.id"), nullable=True)
 
     # Relationships
     sub_process = relationship("SubProcess", back_populates="data_entities")
@@ -153,8 +153,8 @@ class Application(Base):
     __tablename__ = "applications"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(255), nullable=False, index=True)
-    data_entity_id = Column(Integer, ForeignKey("data_entities.id"), nullable=False)
+    name = Column(String(255), nullable=True, index=True)
+    data_entity_id = Column(Integer, ForeignKey("data_entities.id"), nullable=True)
 
     # Relationships
     data_entity = relationship("DataEntity", back_populates="applications")
@@ -169,9 +169,9 @@ class API(Base):
     __tablename__ = "apis"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(255), nullable=False, index=True)
+    name = Column(String(255), nullable=True, index=True)
     assumption = Column(String(255), nullable=True)
-    application_id = Column(Integer, ForeignKey("applications.id"), nullable=False)
+    application_id = Column(Integer, ForeignKey("applications.id"), nullable=True)
 
     # Relationships
     application = relationship("Application", back_populates="apis")

@@ -5,7 +5,7 @@ from typing import List, Optional
 class APIResponse(BaseModel):
     """API Response schema."""
     id: int
-    name: str
+    name: Optional[str] = None
     assumption: Optional[str] = None
 
     class Config:
@@ -15,7 +15,7 @@ class APIResponse(BaseModel):
 class ApplicationResponse(BaseModel):
     """Application Response schema."""
     id: int
-    name: str
+    name: Optional[str] = None
     apis: List[APIResponse] = []
 
     class Config:
@@ -25,7 +25,7 @@ class ApplicationResponse(BaseModel):
 class DataEntityResponse(BaseModel):
     """Data Entity Response schema."""
     id: int
-    name: str
+    name: Optional[str] = None
     applications: List[ApplicationResponse] = []
 
     class Config:
@@ -35,7 +35,7 @@ class DataEntityResponse(BaseModel):
 class SubProcessResponse(BaseModel):
     """Sub-Process Response schema."""
     id: int
-    name: str
+    name: Optional[str] = None
     description: Optional[str] = None
     process_level: Optional[str] = None
     process_category: Optional[str] = None
@@ -48,7 +48,7 @@ class SubProcessResponse(BaseModel):
 class ProcessResponse(BaseModel):
     """Process Response schema."""
     id: int
-    name: str
+    name: Optional[str] = None
     description: Optional[str] = None
     sub_processes: List[SubProcessResponse] = []
 
@@ -73,7 +73,7 @@ class CapabilityDetailResponse(BaseModel):
 class CapabilitySimpleResponse(BaseModel):
     """Simple capability response for list."""
     id: int
-    name: str
+    name: Optional[str] = None
     description: Optional[str] = None
 
     class Config:
